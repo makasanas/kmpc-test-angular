@@ -137,39 +137,25 @@
             <form [formGroup]="groupform">
                 <div class="input-group">
                     <div class="input">
-                        <input type="text" formControlName="shortTitle">
+                        <input type="text" formControlName="shortTitle" placeholder="Group short title">
                     </div>
                 </div>
                 <div class="input-group">
                     <div class="input">
-                        <input type="text" formControlName="title">
+                        <input type="text" formControlName="title" placeholder="Group title">
                     </div>
                 </div>
                 <div class="input-group">
                     <div class="input">
-                        <input type="text" formControlName="wifi">
+                        <input type="text" formControlName="wifi" placeholder="Wifi credentials">
                     </div>
                 </div>
                 <div class="input-group">
                     <div class="input">
-                        <input type="text" formControlName="groupCost">
+                        <input type="text" formControlName="groupCost" placeholder="Group Cost">
                     </div>
                 </div>
-                <div class="input-group">
-                    <div class="input">
-                        <input type="text" formControlName="sumCost">
-                    </div>
-                </div>
-                <div class="input-group">
-                    <div class="input">
-                        <input type="text" formControlName="amountSensors">
-                    </div>
-                </div>
-                <div class="input-group">
-                    <div class="input">
-                        <input type="text" formControlName="parentGroup">
-                    </div>
-                </div>
+                <input type="text" formControlName="parentGroup" class="hidden">
             </form>
         </div>
         <div class="popup-footer">
