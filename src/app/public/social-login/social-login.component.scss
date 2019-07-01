@@ -1,0 +1,82 @@
+.row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    flex-wrap: wrap;
+}
+
+.login-with {
+    width: 100%;
+    margin-bottom: -10px;
+    ul {
+        list-style-type: none;
+        margin: 0px;
+        padding: 0px;
+        display: flex;
+        width: 100%;
+        align-items: center;
+        justify-content: center;
+        li {
+            margin-right: 15px;
+            background: #fff;
+            padding: 0;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: none;
+            border: 1px solid #efe1e1;
+            border-radius: 100%;
+            cursor: pointer;
+            transition: all 0.5s;
+            .icon {
+                height: 24px;
+                width: 24px;
+                margin-right: 0px;
+                margin-bottom: 0px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                svg {
+                    height: 24px;
+                    width: 24px;
+                }
+            }
+            &:first-child {
+                background: #475993;
+                border-color: #475993;
+                .icon {
+                    svg {
+                        fill: #fff;
+                    }
+                }
+                &:hover {
+                    box-shadow: 0px 0px 10px -2px #475993;
+                }
+            }
+            &:last-child {
+                background: #dc4e41;
+                border-color: #dc4e41;
+                margin-right: 0px;
+                .icon {
+                    svg {
+                        path {
+                            fill: #fff;
+                        }
+                    }
+                }
+                &:hover {
+                    box-shadow: 0px 0px 10px -2px #dc4e41;
+                }
+            }
+        }
+    }
+    .text {
+        margin-top: 20px;
+        color: #d0d0d0;
+        font-size: 16px;
+        letter-spacing: 1px;
+    }
+}
