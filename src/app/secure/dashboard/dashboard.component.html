@@ -6,7 +6,7 @@
             <h3>Groups</h3>
         </div>
         <div class="right">
-            <button class="btn">
+            <button class="btn" (click)="changePopup('addGroup',null)">
                 <span>Add Group</span>
             </button>
         </div>
@@ -16,35 +16,69 @@
             <table>
                 <thead>
                     <tr>
-                        <th>
+                        <th (click)="sort('shortTitle')">
                             <span>Short Title</span>
+                            <i *ngIf="data != ''" class="fa" [ngClass]="{'fa-sort': column != 'shortTitle', 
+                      'fa-sort-asc': (column == 'shortTitle' && !isDesc), 
+                      'fa-sort-desc': (column == 'shortTitle' && isDesc) }" aria-hidden="true"> </i>
                         </th>
-                        <th>
+                        <th (click)="sort('title')">
                             <span>Title</span>
+                            <i *ngIf="resultData != ''" class="fa" [ngClass]="{'fa-sort': column != 'title', 
+                      'fa-sort-asc': (column == 'title' && !isDesc), 
+                      'fa-sort-desc': (column == 'title' && isDesc) }" aria-hidden="true"> </i>
                         </th>
-                        <th>
+                        <th (click)="sort('wifi')">
                             <span>Wifi</span>
+                            <i *ngIf="resultData != ''" class="fa" [ngClass]="{'fa-sort': column != 'wifi', 
+                      'fa-sort-asc': (column == 'wifi' && !isDesc), 
+                      'fa-sort-desc': (column == 'wifi' && isDesc) }" aria-hidden="true"> </i>
                         </th>
-                        <th>
+                        <th (click)="sort('groupCost')">
                             <span>Group Cost</span>
+                            <i *ngIf="resultData != ''" class="fa" [ngClass]="{'fa-sort': column != 'groupCost', 
+                      'fa-sort-asc': (column == 'groupCost' && !isDesc), 
+                      'fa-sort-desc': (column == 'groupCost' && isDesc) }" aria-hidden="true"> </i>
                         </th>
-                        <th>
+                        <th (click)="sort('sumCost')">
                             <span>Sum Cost</span>
+                            <i *ngIf="resultData != ''" class="fa" [ngClass]="{'fa-sort': column != 'sumCost', 
+                      'fa-sort-asc': (column == 'sumCost' && !isDesc), 
+                      'fa-sort-desc': (column == 'sumCost' && isDesc) }" aria-hidden="true"> </i>
                         </th>
-                        <th>
+                        <th (click)="sort('amountSensors')">
                             <span>Amount Sensor</span>
+                            <i *ngIf="resultData != ''" class="fa" [ngClass]="{'fa-sort': column != 'amountSensors', 
+                      'fa-sort-asc': (column == 'amountSensors' && !isDesc), 
+                      'fa-sort-desc': (column == 'amountSensors' && isDesc) }" aria-hidden="true"> </i>
                         </th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody class="loading" *ngIf="data.length == 0">
+                    <tr>
+                        <td colspan="6">
+                            <div *ngIf="!unforseenError">
+                                <div class="loading-circle">
+                                    <div class="half-circle"></div>
+                                </div>
+                                <div class="loading-text">{{randomLoadingString}}</div>
+                            </div>
+                            <div *ngIf="unforseenError" class="getarcherror">
+                                {{getArchError}}
+                                <button class="btn" (click)="retryApiCall();">Retry</button>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+                <tbody *ngIf="data.length != 0">
                     <ng-template ngFor let-singleResult [ngForOf]="data" let-i="index">
                         <tr (click)="activateRowDetails(i); " [ngClass]="{'active' : activeDetailedRow[i] == true}">
-                            <td>{{singleResult.short_title}}</td>
+                            <td>{{singleResult.shortTitle}}</td>
                             <td>{{singleResult.title}}</td>
                             <td>{{singleResult.wifi}}</td>
-                            <td>{{singleResult.group_cost}}</td>
-                            <td>{{singleResult.sum_cost}}</td>
-                            <td>{{singleResult.amount_sensors}}</td>
+                            <td>{{singleResult.groupCost}}</td>
+                            <td>{{singleResult.sumCost}}</td>
+                            <td>{{singleResult.amountSensors}}</td>
                         </tr>
                         <tr *ngIf="activeDetailedRow[i] == true">
                             <td colspan="6" class="data-td">
@@ -59,6 +93,15 @@
                                 </div>
                                 <div class="data-title">
                                     <h3>{{singleResult.title}}</h3>
+                                    <div class="add-button">
+                                        <button class="btn btn-primary"
+                                            (click)="changePopup('addGroup',singleResult._id)">
+                                            <span>Add Group</span>
+                                        </button> <button class="btn btn-primary"
+                                            (click)="changePopup('addSensor',singleResult._id)">
+                                            <span>Add Sensor</span>
+                                        </button>
+                                    </div>
                                 </div>
                                 <table class="sub-table">
                                     <thead>
@@ -163,7 +206,65 @@
                 <button class="btn">
                     <span>Cancle</span>
                 </button>
-                <button class="btn btn-primary">
+                <button class="btn btn-primary" (click)="addGroup();">
+                    <span>Add</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="popup-container" [ngClass]="{active: popupActive.addSensor}">
+    <div class="popup">
+        <div class="close" (click)="changePopup('addSensor')">&times;</div>
+        <div class="popup-heading">
+            <h1>Add Sensor</h1>
+        </div>
+        <div class="form">
+            <form [formGroup]="sensorform">
+                <div class="input-group">
+                    <div class="input">
+                        <input type="text" formControlName="mac" placeholder="Mac">
+                    </div>
+                </div>
+                <div class="input-group">
+                    <div class="input">
+                        <input type="text" formControlName="title" placeholder="Sensor title">
+                    </div>
+                </div>
+                <div class="input-group">
+                    <div class="input">
+                        <input type="text" formControlName="assignment" placeholder="Assignment">
+                    </div>
+                </div>
+                <div class="input-group">
+                    <div class="input">
+                        <input type="text" formControlName="version" placeholder="Version">
+                    </div>
+                </div>
+                <div class="input-group">
+                    <div class="input">
+                        <input type="date" formControlName="shipped" placeholder="Shipping date">
+                    </div>
+                </div>
+                <div class="input-group">
+                    <div class="input">
+                        <input type="date" formControlName="installed" placeholder="Installation date">
+                    </div>
+                </div>
+                <div class="input-group">
+                    <div class="input">
+                        <input type="text" formControlName="sensorCost" placeholder="Sensor Cost">
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="popup-footer">
+            <div class="actions end">
+                <button class="btn">
+                    <span>Cancle</span>
+                </button>
+                <button class="btn btn-primary" (click)="addSensor();">
                     <span>Add</span>
                 </button>
             </div>

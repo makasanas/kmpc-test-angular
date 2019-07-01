@@ -215,6 +215,18 @@ $brand_color: #6f79fd;
             font-weight: 600;
             color: $brand_color;
             padding-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+
+            .add-button {
+                .btn {
+                    padding: 5px 10px;
+                    font-size: 12px;
+                    margin-left: 10px;
+                    letter-spacing: 0.2px;
+                }
+            }
         }
     }
 

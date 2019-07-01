@@ -2,6 +2,36 @@
 $brand_color: #6f79fd;
 $heading_color: #3b3449;
 
+@keyframes rotation {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    15% {
+        transform: rotate(45deg);
+    }
+
+    30% {
+        transform: rotate(90deg);
+    }
+
+    55% {
+        transform: rotate(180deg);
+    }
+
+    70% {
+        transform: rotate(240deg);
+    }
+
+    85% {
+        transform: rotate(290deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
 html,
 body,
 div,
@@ -193,6 +223,8 @@ a {
 }
 
 button {
+    cursor: pointer;
+
     &.btn {
         padding: 10px 20px;
         border: none;
