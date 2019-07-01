@@ -298,3 +298,26 @@ button {
         }
     }
 }
+
+.input-group {
+    width: 100%;
+    margin-bottom: 20px;
+
+    .input {
+        width: 100%;
+
+        input {
+            width: 100%;
+        }
+    }
+}
+
+.actions {
+
+    display: flex;
+    align-items: center;
+
+    &.end {
+        justify-content: flex-end;
+    }
+}

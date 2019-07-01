@@ -26,6 +26,7 @@ export class SecureService {
     };
     let headers = new HttpHeaders();
     console.log(headers);
-    return this.http.get(environment.api + 'api/v1/sensor/groups', httpOptions).pipe(map((response: any) => response.json()));
+    return this.http.get(environment.api + 'api/v1/sensor/groups', httpOptions).pipe(map((response: any) => response));
   }
 }
+  
