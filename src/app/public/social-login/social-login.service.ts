@@ -13,6 +13,6 @@ export class SocialLoginService {
   ) { }
 
   socialsignup(data) {
-    return this.http.post(environment.api + 'socialSignup', data).pipe(map((response: any) => response.json()));
+    return this.http.post(environment.api + 'api/v1/user/login', data).pipe(map((response: any) => response.json()));
   }
 }

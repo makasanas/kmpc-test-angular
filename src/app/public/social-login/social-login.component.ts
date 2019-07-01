@@ -38,17 +38,20 @@ export class SocialLoginComponent implements OnInit {
           firstname: userData.name,
           lastname: userData.name,
           email: userData.email,
-          signupWith: userData.provider,
-          socialToken: userData.token
+          socialId: userData.id,
+          phone: userData['phone'] ? userData['phone'] : '',
+          gender: userData['gender'] ? userData['gender'] : '',
+          image: userData.image
+
         }
-        // this._socialSignupService.socialsignup(user).subscribe((res) => {
-        //   console.log(res);
-        //   localStorage.setItem('token', res.data.token);
-        //   localStorage.setItem('userRole', res.data.role);
-        //   this._router.navigateByUrl('/dashboard');
-        // }, err => {
-        //   console.log(err);
-        // });
+        this._socialSignupService.socialsignup(user).subscribe((res) => {
+          console.log(res);
+          // localStorage.setItem('token', res.data.token);
+          // localStorage.setItem('userRole', res.data.role);
+          this._router.navigateByUrl('/dashboard');
+        }, err => {
+          console.log(err);
+        });
 
       }
     );

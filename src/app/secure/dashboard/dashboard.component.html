@@ -1,115 +1,176 @@
 <app-header></app-header>
-<div class="box rslt-box m-b-t-40">
-    <div class="result-table">
-        <table>
-            <thead>
-                <tr>
-                    <th>
-                        <span>Short Title</span>
-                    </th>
-                    <th>
-                        <span>Title</span>
-                    </th>
-                    <th>
-                        <span>Wifi</span>
-                    </th>
-                    <th>
-                        <span>Group Cost</span>
-                    </th>
-                    <th>
-                        <span>Sum Cost</span>
-                    </th>
-                    <th>
-                        <span>Amount Sensor</span>
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-                <ng-template ngFor let-singleResult [ngForOf]="data" let-i="index">
-                    <tr (click)="activateRowDetails(i); " [ngClass]="{'active' : activeDetailedRow[i] == true}">
-                        <td>{{singleResult.short_title}}</td>
-                        <td>{{singleResult.title}}</td>
-                        <td>{{singleResult.wifi}}</td>
-                        <td>{{singleResult.group_cost}}</td>
-                        <td>{{singleResult.sum_cost}}</td>
-                        <td>{{singleResult.amount_sensors}}</td>
+
+<div class="container">
+    <div class="header b-row">
+        <div class="left">
+            <h3>Groups</h3>
+        </div>
+        <div class="right">
+            <button class="btn">
+                <span>Add Group</span>
+            </button>
+        </div>
+    </div>
+    <div class="box rslt-box m-b-t-40">
+        <div class="result-table">
+            <table>
+                <thead>
+                    <tr>
+                        <th>
+                            <span>Short Title</span>
+                        </th>
+                        <th>
+                            <span>Title</span>
+                        </th>
+                        <th>
+                            <span>Wifi</span>
+                        </th>
+                        <th>
+                            <span>Group Cost</span>
+                        </th>
+                        <th>
+                            <span>Sum Cost</span>
+                        </th>
+                        <th>
+                            <span>Amount Sensor</span>
+                        </th>
                     </tr>
-                    <tr *ngIf="activeDetailedRow[i] == true">
-                        <td colspan="6" class="data-td">
-                            <div class="close icon" (click)="activeDetailedRow[i] = false">
-                                <svg id="Layer_1" height="512px" version="1.1" viewBox="0 0 512 512" width="512px"
-                                    space="preserve" xmlns="http://www.w3.org/2000/svg"
-                                    xlink="http://www.w3.org/1999/xlink">
-                                    <path
-                                        d="M437.5,386.6L306.9,256l130.6-130.6c14.1-14.1,14.1-36.8,0-50.9c-14.1-14.1-36.8-14.1-50.9,0L256,205.1L125.4,74.5  c-14.1-14.1-36.8-14.1-50.9,0c-14.1,14.1-14.1,36.8,0,50.9L205.1,256L74.5,386.6c-14.1,14.1-14.1,36.8,0,50.9  c14.1,14.1,36.8,14.1,50.9,0L256,306.9l130.6,130.6c14.1,14.1,36.8,14.1,50.9,0C451.5,423.4,451.5,400.6,437.5,386.6z">
-                                    </path>
-                                </svg>
-                            </div>
-                            <div class="data-title">
-                                <h3>{{singleResult.title}}</h3>
-                            </div>
-                            <table class="sub-table">
-                                <thead>
-                                    <tr>
-                                        <th>
-                                            <span>Mac</span>
-                                        </th>
-                                        <th>
-                                            <span>Title</span>
-                                        </th>
-                                        <th>
-                                            <span>Assignment</span>
-                                        </th>
-                                        <th>
-                                            <span>Version</span>
-                                        </th>
-                                        <th>
-                                            <span>Shipped</span>
-                                        </th>
-                                        <th>
-                                            <span>Installed</span>
-                                        </th>
-                                        <th>
-                                            <span>Sensor Cost</span>
-                                        </th>
-                                        <th>
-                                            <span>Last Seen</span>
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr *ngFor="let sensor of singleResult.sensors">
-                                        <td *ngIf="sensor.mac">
-                                            <span>{{sensor.mac}}</span>
-                                        </td>
-                                        <td *ngIf="sensor.title">
-                                            <span>{{sensor.title}}</span>
-                                        </td>
-                                        <td *ngIf="sensor.assignment">
-                                            <span>{{sensor.assignment}}</span>
-                                        </td>
-                                        <td *ngIf="sensor.version">
-                                            <span>{{sensor.version}}</span>
-                                        </td>
-                                        <td *ngIf="sensor.shipped">
-                                            <span>{{sensor.shipped}}</span>
-                                        </td>
-                                        <td *ngIf="sensor.installed">
-                                            <span>{{sensor.installed}}</span>
-                                        </td>
-                                        <td *ngIf="sensor.sensor_cost">
-                                            <span>{{sensor.sensor_cost}}</span>
-                                        </td>
-                                        <td *ngIf="sensor.last_seen">
-                                            <span>{{sensor.last_seen}}</span>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </td>
-                    </tr>
-                </ng-template>
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    <ng-template ngFor let-singleResult [ngForOf]="data" let-i="index">
+                        <tr (click)="activateRowDetails(i); " [ngClass]="{'active' : activeDetailedRow[i] == true}">
+                            <td>{{singleResult.short_title}}</td>
+                            <td>{{singleResult.title}}</td>
+                            <td>{{singleResult.wifi}}</td>
+                            <td>{{singleResult.group_cost}}</td>
+                            <td>{{singleResult.sum_cost}}</td>
+                            <td>{{singleResult.amount_sensors}}</td>
+                        </tr>
+                        <tr *ngIf="activeDetailedRow[i] == true">
+                            <td colspan="6" class="data-td">
+                                <div class="close icon" (click)="activeDetailedRow[i] = false">
+                                    <svg id="Layer_1" height="512px" version="1.1" viewBox="0 0 512 512" width="512px"
+                                        space="preserve" xmlns="http://www.w3.org/2000/svg"
+                                        xlink="http://www.w3.org/1999/xlink">
+                                        <path
+                                            d="M437.5,386.6L306.9,256l130.6-130.6c14.1-14.1,14.1-36.8,0-50.9c-14.1-14.1-36.8-14.1-50.9,0L256,205.1L125.4,74.5  c-14.1-14.1-36.8-14.1-50.9,0c-14.1,14.1-14.1,36.8,0,50.9L205.1,256L74.5,386.6c-14.1,14.1-14.1,36.8,0,50.9  c14.1,14.1,36.8,14.1,50.9,0L256,306.9l130.6,130.6c14.1,14.1,36.8,14.1,50.9,0C451.5,423.4,451.5,400.6,437.5,386.6z">
+                                        </path>
+                                    </svg>
+                                </div>
+                                <div class="data-title">
+                                    <h3>{{singleResult.title}}</h3>
+                                </div>
+                                <table class="sub-table">
+                                    <thead>
+                                        <tr>
+                                            <th>
+                                                <span>Mac</span>
+                                            </th>
+                                            <th>
+                                                <span>Title</span>
+                                            </th>
+                                            <th>
+                                                <span>Assignment</span>
+                                            </th>
+                                            <th>
+                                                <span>Version</span>
+                                            </th>
+                                            <th>
+                                                <span>Shipped</span>
+                                            </th>
+                                            <th>
+                                                <span>Installed</span>
+                                            </th>
+                                            <th>
+                                                <span>Sensor Cost</span>
+                                            </th>
+                                            <th>
+                                                <span>Last Seen</span>
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let sensor of singleResult.sensors">
+                                            <td *ngIf="sensor.mac">
+                                                <span>{{sensor.mac}}</span>
+                                            </td>
+                                            <td *ngIf="sensor.title">
+                                                <span>{{sensor.title}}</span>
+                                            </td>
+                                            <td *ngIf="sensor.assignment">
+                                                <span>{{sensor.assignment}}</span>
+                                            </td>
+                                            <td *ngIf="sensor.version">
+                                                <span>{{sensor.version}}</span>
+                                            </td>
+                                            <td *ngIf="sensor.shipped">
+                                                <span>{{sensor.shipped}}</span>
+                                            </td>
+                                            <td *ngIf="sensor.installed">
+                                                <span>{{sensor.installed}}</span>
+                                            </td>
+                                            <td *ngIf="sensor.sensor_cost">
+                                                <span>{{sensor.sensor_cost}}</span>
+                                            </td>
+                                            <td *ngIf="sensor.last_seen">
+                                                <span>{{sensor.last_seen}}</span>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </td>
+                        </tr>
+                    </ng-template>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="popup-container" [ngClass]="{active: popupActive.addGroup}">
+    <div class="popup">
+        <div class="close" (click)="changePopup('addGroup')">&times;</div>
+        <div class="popup-heading">
+            <h1>Add Group</h1>
+        </div>
+        <div class="form">
+            <form [formGroup]="groupform">
+                <div class="input-group">
+                    <div class="input">
+                        <input type="text" formControlName="shortTitle">
+                    </div>
+                </div>
+                <div class="input-group">
+                    <div class="input">
+                        <input type="text" formControlName="shortTitle">
+                    </div>
+                </div>
+                <div class="input-group">
+                    <div class="input">
+                        <input type="text" formControlName="shortTitle">
+                    </div>
+                </div>
+                <div class="input-group">
+                    <div class="input">
+                        <input type="text" formControlName="shortTitle">
+                    </div>
+                </div>
+                <div class="input-group">
+                    <div class="input">
+                        <input type="text" formControlName="shortTitle">
+                    </div>
+                </div>
+                <div class="input-group">
+                    <div class="input">
+                        <input type="text" formControlName="shortTitle">
+                    </div>
+                </div>
+                <div class="input-group">
+                    <div class="input">
+                        <input type="text" formControlName="shortTitle">
+                    </div>
+                </div>
+            </form>
+        </div>
     </div>
 </div>

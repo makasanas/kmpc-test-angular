@@ -13,6 +13,8 @@ import { SocialLoginComponent } from './public/social-login/social-login.compone
 import { SocialLoginModule, AuthServiceConfig, GoogleLoginProvider, FacebookLoginProvider, } from "angular-6-social-login";
 import { HttpClientModule } from '@angular/common/http';
 import { HeaderComponent } from './common/header/header.component';
+import { FormsModule } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 
 export function getAuthServiceConfigs() {
   let config = new AuthServiceConfig(
@@ -43,7 +45,9 @@ export function getAuthServiceConfigs() {
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-    SocialLoginModule
+    SocialLoginModule,
+    FormsModule,
+    ReactiveFormsModule
   ],
   providers: [
     AuthGuardForLoggedIn,

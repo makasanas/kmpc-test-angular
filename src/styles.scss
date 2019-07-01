@@ -163,9 +163,7 @@ a {
         max-width: 560px;
     }
 
-    &.rslt-box {
-        max-width: 80%;
-    }
+    &.rslt-box {}
 }
 
 .title {
@@ -177,6 +175,126 @@ a {
 
         h3 {
             font-weight: 500;
+        }
+    }
+}
+
+.b-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.header {
+    h3 {
+        font-size: 22px;
+        font-weight: normal;
+    }
+}
+
+button {
+    &.btn {
+        padding: 10px 20px;
+        border: none;
+        background: #f1f1f1;
+        border-radius: 3px;
+        font-size: 14px;
+    }
+
+    &.btn-primary {
+        background: $brand_color;
+        color: #fff;
+    }
+}
+
+
+.popup-container {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(0, 0, 0, 0.7);
+    transition: opacity 500ms;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 12;
+
+    &.active {
+        display: flex;
+    }
+
+    .popup {
+        margin: 70px auto;
+        padding: 20px;
+        background: #fff;
+        border-radius: 5px;
+        width: 100%;
+        position: relative;
+        transition: all 5s ease-in-out;
+        max-width: 480px;
+
+        @media screen and (max-width: 767px) {
+            margin: 0;
+            height: 100vh;
+            width: 100vw;
+            border-radius: 0px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .popup-heading {
+            margin-bottom: 20px;
+
+            h1 {
+                font-size: 20px;
+            }
+        }
+
+        .close {
+            position: absolute;
+            top: 0px;
+            right: 10px;
+            transition: all 200ms;
+            font-size: 30px;
+            font-weight: bold;
+            text-decoration: none;
+            color: #333;
+            cursor: pointer;
+            background: none;
+            border: none;
+
+            @media screen and (max-width: 767px) {
+                display: none;
+            }
+        }
+
+        .message {
+            margin-bottom: 20px;
+            font-size: 20px;
+            text-align: center;
+        }
+
+        .actions {
+            @media screen and (max-width: 1199px) {
+                display: flex;
+            }
+
+            .btn {
+                margin-right: 20px;
+
+                &:last-child {
+                    margin-right: 0px;
+                }
+            }
+        }
+
+        .content {
+            max-height: 30%;
+            // overflow: auto;
         }
     }
 }

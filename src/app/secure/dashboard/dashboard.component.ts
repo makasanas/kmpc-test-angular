@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { SecureService } from '../secure.service';
+import { FormBuilder, Validators } from '@angular/forms';
+
 
 @Component({
   selector: 'app-dashboard',
@@ -163,17 +166,43 @@ export class DashboardComponent implements OnInit {
     }
   ]
 
+  public activeDetailedRow: any = [];
+  public groupform: any;
+  public popupActive = {
+    "addGroup": true
+  };
 
-	public activeDetailedRow: any = [];
-
-  constructor() { }
+  constructor(private _secService: SecureService, private _fb: FormBuilder) {
+    this.groupform = this._fb.group({
+      'shortTitle': ['', [Validators.required]],
+      'title': ['', [Validators.required]],
+      'wifi': ['', [Validators.required]],
+      'groupCost': ['', [Validators.required]],
+      'sumCost': ['', [Validators.required]],
+      'amountSensors': ['', Validators.required],
+      'parentGroup': ''
+    });
+  }
 
   ngOnInit() {
     this.data.forEach((element, index) => {
       this.activeDetailedRow[index] = false;
     });
+
+    this._secService.getAllGroups().subscribe((res) => {
+      console.log(res);
+    }, err => {
+      console.log(err);
+    });
+
   }
+
+  changePopup(popup: string) {
+    this.popupActive[popup] = !this.popupActive[popup];
+  }
+
   activateRowDetails(index) {
-		this.activeDetailedRow[index] = !this.activeDetailedRow[index];
-	}
+    this.activeDetailedRow[index] = !this.activeDetailedRow[index];
+  }
+
 }
