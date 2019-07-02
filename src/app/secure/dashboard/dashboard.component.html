@@ -33,6 +33,10 @@
             </button>
         </div>
     </div>
+
+    <div class="b-row">
+        <input type="text" (keyup)='keyUp.next($event)' class="form-control" placeholder="Search" />
+    </div>
     <div class="box rslt-box m-b-t-40">
         <div class="result-table">
             <table>
@@ -96,8 +100,8 @@
                 <tbody *ngIf="groups.length != 0">
                     <ng-template ngFor let-singleResult [ngForOf]="groups" let-i="index">
                         <!-- <tr (click)="activateRowDetails(i); " [ngClass]="{'active' : activeDetailedRow[i] == true}"> -->
-                        <tr (click)="getGroupData(singleResult);">
-                            <td>{{singleResult.shortTitle}}</td>
+                        <tr>
+                            <td (click)="getGroupData(singleResult);">{{singleResult.shortTitle}}</td>
                             <td>{{singleResult.title}}</td>
                             <td>{{singleResult.wifi}}</td>
                             <td>{{singleResult.groupCost}}</td>

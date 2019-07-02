@@ -2,7 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { SecureService } from '../secure.service';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ValidationService } from './../../services/validation/validationService.service';
-
+import { map } from 'rxjs/operators';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-dashboard',
@@ -12,6 +13,7 @@ import { ValidationService } from './../../services/validation/validationService
 export class DashboardComponent implements OnInit {
 
   public groups = [];
+  public copyGroups = [];
   public sensors = [];
 
   public unforseenError = false;
@@ -34,13 +36,18 @@ export class DashboardComponent implements OnInit {
       "mainGroup": true,
     }
   ];
+  public keyUp = new Subject<string>();
+  public sortTable: any = {};
+  public isDesc: any;
+  public column: any;
+  public filter: any = {};
 
   constructor(private _secService: SecureService, private _fb: FormBuilder) {
     this.groupform = this._fb.group({
       'shortTitle': ['', [Validators.required]],
       'title': ['', [Validators.required]],
       'wifi': ['', [Validators.required]],
-      'groupCost': ['', [Validators.required, ValidationService.numeric]],
+      'groupCost': [Number, [Validators.required, ValidationService.numeric]],
       'parentGroup': ''
     });
     this.sensorform = this._fb.group({
@@ -48,7 +55,7 @@ export class DashboardComponent implements OnInit {
       'title': ['', [Validators.required]],
       'assignment': ['', [Validators.required]],
       'version': ['', [Validators.required]],
-      'sensorCost': ['', [Validators.required, ValidationService.numeric]],
+      'sensorCost': [Number, [Validators.required, ValidationService.numeric]],
       'shipped': [Date, [Validators.required]],
       'installed': [Date, [Validators.required]],
       'parentGroup': ''
@@ -243,9 +250,6 @@ export class DashboardComponent implements OnInit {
       console.log(err);
     });
   }
-  public sortTable: any = {};
-  public isDesc: any;
-  public column: any;
   // public keyUp = new Subject<string>();
   sort(property) {
     if (this.sortTable[property]) {
@@ -270,22 +274,25 @@ export class DashboardComponent implements OnInit {
     });
   }
 
-  // searchInTable() {
-  // 	this.keyUp
-  // 		.map((event) => {
-  // 			return { 'value': event['target'].value, 'id': event['target'].id }
-  // 		})
-  // 		// .debounceTime(300)
-  // 		.subscribe(value => {
-  // 			this.filter[value.id] = value.value;
-  // 			this.resultData = this.copyResultData.filter((obj) => {
-  // 				let array = [];
-  // 				for (var prop in this.filter) {
-  // 					array.push(obj[prop].toLowerCase().includes(this.filter[prop]));
-  // 				}
-  // 				return array.every(x => x === true);
-  // 			});
-  // 		});
-  // }
+
+
+  searchInTable() {
+    console.log('search called');
+    this.keyUp
+      .pipe(map((event) => {
+        return { 'value': event['target'].value, 'id': event['target'].id }
+      }))
+      // .debounceTime(300)
+      .subscribe(value => {
+        this.filter[value.id] = value.value;
+        this.groups = this.copyGroups.filter((obj) => {
+          let array = [];
+          for (var prop in this.filter) {
+            array.push(obj[prop].toLowerCase().includes(this.filter[prop]));
+          }
+          return array.every(x => x === true);
+        });
+      });
+  }
 
 }
