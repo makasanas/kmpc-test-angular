@@ -46,7 +46,7 @@ export class SocialLoginComponent implements OnInit {
         }
         this._socialSignupService.socialsignup(user).subscribe((res) => {
           console.log(res);
-          localStorage.setItem('token', res.data.token);
+          localStorage.setItem('token', res.token);
           // localStorage.setItem('userRole', res.data.role);
           this._router.navigateByUrl('/dashboard');
         }, err => {
