@@ -25,7 +25,7 @@ $brand_color: #6f79fd;
                         top: 50%;
                         right: 8px;
                         transform: translateY(-50%);
-
+                        display: none;
                         &.fa-sort-asc {
                             &:before {
                                 content: url('../../../assets/icons/up-arrow.svg');
