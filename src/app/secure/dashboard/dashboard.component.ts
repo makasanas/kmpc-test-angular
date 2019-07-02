@@ -4,11 +4,14 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { ValidationService } from './../../services/validation/validationService.service';
 import { map } from 'rxjs/operators';
 import { Subject } from 'rxjs';
+import { DatePipe } from '@angular/common';
+
 
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.scss']
+  styleUrls: ['./dashboard.component.scss'],
+  providers: [DatePipe]
 })
 export class DashboardComponent implements OnInit {
 
@@ -20,8 +23,10 @@ export class DashboardComponent implements OnInit {
 
   public activeDetailedRow: any = [];
   public groupform: any;
+  public isLoading: boolean = true;
   public sensorform: any;
-  public tmpGroupId: string;
+  public tmpGroupId: any = null;
+  public tmpGroup: any;
   public tmpSensorId: string;
   public tmpUpdateId: string;
   public isGroupData: boolean = false;
@@ -42,7 +47,7 @@ export class DashboardComponent implements OnInit {
   public column: any;
   public filter: any = {};
 
-  constructor(private _secService: SecureService, private _fb: FormBuilder) {
+  constructor(private datePipe: DatePipe, private _secService: SecureService, private _fb: FormBuilder) {
     this.groupform = this._fb.group({
       'shortTitle': ['', [Validators.required]],
       'title': ['', [Validators.required]],
@@ -71,15 +76,13 @@ export class DashboardComponent implements OnInit {
   getGroups() {
     this._secService.getAllGroups().subscribe((res) => {
       console.log(res);
+      this.isLoading = false;
       this.groups = res.groups;
       this.sensors = [];
 
       this.groups.forEach((element, index) => {
         this.activeDetailedRow[index] = false;
       });
-
-
-
     }, err => {
       console.log(err);
     });
@@ -87,15 +90,20 @@ export class DashboardComponent implements OnInit {
   }
 
   getGroupData(data, menuClick) {
-
     if (!menuClick) {
       this.navigation.push(data);
     }
-
     this.tmpGroupId = data._id;
+    this.tmpGroup = data;
     this._secService.getGroup(data._id).subscribe((res) => {
       this.groups = res.groups;
       this.sensors = res.sensors;
+      this.sensors.forEach(element => {
+        console.log(element.shipped);
+        console.log(element.installed);
+        // element.shipped = this.datePipe.transform(data.shipped, 'yyyy-MM-dd');
+        // element.installed = this.datePipe.transform(data.installed, 'yyyy-MM-dd');
+      });
       console.log(res);
     }, err => {
       console.log(err);
@@ -155,12 +163,10 @@ export class DashboardComponent implements OnInit {
         let newInstallDate = new Date(data.installed);
 
         this.sensorform.patchValue(data);
-        this.sensorform.controls.shipped.setValue(newShippedDate);
-        this.sensorform.controls.installed.setValue(newInstallDate);
+        this.sensorform.controls.shipped.setValue(this.datePipe.transform(data.shipped, 'yyyy-MM-dd'));
+        this.sensorform.controls.installed.setValue(this.datePipe.transform(data.installed, 'yyyy-MM-dd'));
       }
     } else if (type == 'close') {
-      this.tmpGroupId = '';
-      this.tmpSensorId = '';
       this.groupform.reset();
       this.sensorform.reset();
     }
@@ -182,7 +188,11 @@ export class DashboardComponent implements OnInit {
       this._secService.addGroup(this.groupform.value).subscribe((res) => {
         console.log(res);
         this.changePopup('addGroup', null, 'close');
-        this.getGroups();
+        if (!this.tmpGroupId) {
+          this.getGroups();
+        } else {
+          this.getGroupData(this.tmpGroup, true)
+        }
       }, err => {
         console.log(err);
         this.changePopup('addGroup', null, 'close');
@@ -193,7 +203,11 @@ export class DashboardComponent implements OnInit {
       this._secService.updateGroup(this.tmpUpdateId, this.groupform.value).subscribe((res) => {
         console.log(res);
         this.changePopup('addGroup', null, 'close');
-        this.getGroups();
+        if (!this.tmpGroupId) {
+          this.getGroups();
+        } else {
+          this.getGroupData(this.tmpGroup, true)
+        }
       }, err => {
         console.log(err);
         this.changePopup('addGroup', null, 'close');
@@ -212,7 +226,9 @@ export class DashboardComponent implements OnInit {
         this.sensorform.controls.parentGroup.setValue(this.tmpSensorId);
         this._secService.addSensor(this.sensorform.value).subscribe((res) => {
           console.log(res);
+
           this.changePopup('addSensor', null, 'close');
+          this.getGroupData(this.tmpGroup, true)
         }, err => {
           console.log(err);
           this.changePopup('addSensor', null, 'close');
@@ -223,6 +239,7 @@ export class DashboardComponent implements OnInit {
       this.sensorform.controls.parentGroup.setValue(this.tmpSensorId);
       this._secService.updateSensor(this.tmpUpdateId, this.sensorform.value).subscribe((res) => {
         console.log(res);
+        this.getGroupData(this.tmpGroup, true)
         this.changePopup('addSensor', null, 'close');
       }, err => {
         console.log(err);

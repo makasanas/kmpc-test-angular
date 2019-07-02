@@ -101,7 +101,8 @@
                     <ng-template ngFor let-singleResult [ngForOf]="groups" let-i="index">
                         <!-- <tr (click)="activateRowDetails(i); " [ngClass]="{'active' : activeDetailedRow[i] == true}"> -->
                         <tr>
-                            <td (click)="getGroupData(singleResult);">{{singleResult.shortTitle}}</td>
+                            <td (click)="getGroupData(singleResult, false);"><span
+                                    class="link-text">{{singleResult.shortTitle}}</span></td>
                             <td>{{singleResult.title}}</td>
                             <td>{{singleResult.wifi}}</td>
                             <td>{{singleResult.groupCost}}</td>
@@ -199,10 +200,10 @@
                                                 <span>{{sensor.version}}</span>
                                             </td>
                                             <td *ngIf="sensor.shipped">
-                                                <span>{{sensor.shipped}}</span>
+                                                <span>{{sensor.shipped | date: 'dd/MM/yyyy'}}</span>
                                             </td>
                                             <td *ngIf="sensor.installed">
-                                                <span>{{sensor.installed}}</span>
+                                                <span>{{sensor.installed | date: 'dd/MM/yyyy'}}</span>
                                             </td>
                                             <td>
                                                 <span *ngIf="sensor.sensor_cost">{{sensor.sensor_cost}}</span>
@@ -263,10 +264,9 @@
                         <th>
                             <span>Sensor Cost</span>
                         </th>
-                        <th>
+                        <!-- <th>
                             <span>Last Seen</span>
-                        </th>
-                        <th></th>
+                        </th> -->
                         <th></th>
                         <th></th>
                     </tr>
@@ -274,13 +274,12 @@
                 <tbody class="loading" *ngIf="sensors.length == 0">
                     <tr>
                         <td colspan="10">
-                            <div *ngIf="!unforseenError">
+                            <div *ngIf="isLoading">
                                 <div class="loading-circle">
                                     <div class="half-circle"></div>
                                 </div>
-                                <div class="loading-text">{{randomLoadingString}}</div>
                             </div>
-                            <div *ngIf="unforseenError" class="getarcherror">
+                            <div *ngIf="!isLoading" class="getarcherror">
                                 no data available
                             </div>
                         </td>
@@ -302,17 +301,17 @@
                                 <span>{{sensor.version}}</span>
                             </td>
                             <td *ngIf="sensor.shipped">
-                                <span>{{sensor.shipped}}</span>
+                                <span>{{sensor.shipped | date}}</span>
                             </td>
                             <td *ngIf="sensor.installed">
-                                <span>{{sensor.installed}}</span>
+                                <span>{{sensor.installed | date}}</span>
                             </td>
                             <td>
-                                <span *ngIf="sensor.sensor_cost">{{sensor.sensor_cost}}</span>
+                                <span *ngIf="sensor.sensorCost">{{sensor.sensorCost}}</span>
                             </td>
-                            <td>
+                            <!-- <td>
                                 <span *ngIf="sensor.last_seen">{{sensor.last_seen}}</span>
-                            </td>
+                            </td> -->
                             <td>
                                 <button class="btn btn-primary sm-btn"
                                     (click)="changePopup('addSensor',sensor,'update');">
@@ -364,7 +363,7 @@
                 </div>
                 <div class="input-group">
                     <div class="input">
-                        <input type="text" formControlName="groupCost" placeholder="Group Cost">
+                        <input type="number" formControlName="groupCost" placeholder="Group Cost">
                     </div>
                     <control-messages [control]="groupform.controls.groupCost" class="controlMessage">
                     </control-messages>
@@ -439,7 +438,7 @@
                 </div>
                 <div class="input-group">
                     <div class="input">
-                        <input type="text" formControlName="sensorCost" placeholder="Sensor Cost">
+                        <input type="number" formControlName="sensorCost" placeholder="Sensor Cost">
                     </div>
                     <control-messages [control]="sensorform.controls.sensorCost" class="controlMessage">
                     </control-messages>

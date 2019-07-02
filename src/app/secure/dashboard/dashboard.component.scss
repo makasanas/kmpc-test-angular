@@ -403,29 +403,40 @@ $brand_color: #6f79fd;
     padding: 30px 0px 0px;
 }
 
-.groupDetial{
+.groupDetial {
     margin: 20px 0px 0px;
-    .items{
-    display: flex;
-    .item{
-    display: flex;
-    margin-right: 15px;
-    align-items: center;
-    p{
-    font-weight: bold;
-    margin-right: 15px;
+
+    .items {
+        display: flex;
+
+        .item {
+            display: flex;
+            margin-right: 15px;
+            align-items: center;
+
+            p {
+                font-weight: bold;
+                margin-right: 15px;
+                cursor: pointer;
+
+                &:hover {
+                    color: #03A9F4;
+                }
+            }
+        }
+
+        .next {
+            display: flex;
+
+            svg {
+                width: 16px;
+                height: 16px;
+            }
+        }
+    }
+}
+
+.link-text{
     cursor: pointer;
-    &:hover{
-    color: #03A9F4;
-    }
-    }
-    }
-    .next{
-    display: flex;
-    svg{
-    width: 16px;
-    height: 16px;
-    }
-    }
-    }
-    }
+    font-weight: bold;
+}
