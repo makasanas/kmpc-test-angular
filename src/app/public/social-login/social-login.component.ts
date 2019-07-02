@@ -31,22 +31,22 @@ export class SocialLoginComponent implements OnInit {
     this.socialAuthService.signIn(socialPlatformProvider).then(
       (userData) => {
         console.log(socialPlatform + " sign in data : ", userData);
-        localStorage.setItem('token', userData.token);
+        // localStorage.setItem('token', userData.token);
         localStorage.setItem('userName', userData.name);
         this._router.navigateByUrl('/dashboard');
         let user = {
-          firstname: userData.name,
-          lastname: userData.name,
+          firstName: userData.name,
+          lastName: userData.name,
           email: userData.email,
           socialId: userData.id,
-          phone: userData['phone'] ? userData['phone'] : '',
+          phoneNumber: userData['phone'] ? userData['phone'] : '',
           gender: userData['gender'] ? userData['gender'] : '',
           image: userData.image
 
         }
         this._socialSignupService.socialsignup(user).subscribe((res) => {
           console.log(res);
-          // localStorage.setItem('token', res.data.token);
+          localStorage.setItem('token', res.data.token);
           // localStorage.setItem('userRole', res.data.role);
           this._router.navigateByUrl('/dashboard');
         }, err => {

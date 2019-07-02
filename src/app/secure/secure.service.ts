@@ -12,7 +12,7 @@ export class SecureService {
   public httpOptions = {
     headers: new HttpHeaders({
       'Content-Type': 'application/json',
-      'Authorization': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1ZDFhYzM4YTYwYTAwMjUzZThlYTM3NzMiLCJpYXQiOjE1NjIwNDM5NjV9.ymgqxlWv8Q3ouL_vNQ6ZKy1_0wO4wK2kJFyneaPMV9I'
+      'Authorization': localStorage.getItem('token')
     })
   };
 
@@ -46,7 +46,7 @@ export class SecureService {
     return this.http.put(environment.api + 'api/v1/sensor/' + id, data, this.httpOptions).pipe(map((response: any) => response));
   }
 
-    deleteGroup(id: String) {
+  deleteGroup(id: String) {
     return this.http.delete(environment.api + 'api/v1/sensor/group/' + id, this.httpOptions).pipe(map((response: any) => response));
   }
 
