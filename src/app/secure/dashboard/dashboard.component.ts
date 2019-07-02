@@ -31,7 +31,7 @@ export class DashboardComponent implements OnInit {
   public navigation = [
     {
       "title": "Group List",
-      "mainGroup":true,
+      "mainGroup": true,
     }
   ];
 
@@ -48,7 +48,7 @@ export class DashboardComponent implements OnInit {
       'title': ['', [Validators.required]],
       'assignment': ['', [Validators.required]],
       'version': ['', [Validators.required]],
-      'sensorCost': ['', [Validators.required]],
+      'sensorCost': ['', [Validators.required, ValidationService.numeric]],
       'shipped': [Date, [Validators.required]],
       'installed': [Date, [Validators.required]],
       'parentGroup': ''
@@ -79,9 +79,9 @@ export class DashboardComponent implements OnInit {
 
   }
 
-  getGroupData(data,menuClick) {
+  getGroupData(data, menuClick) {
 
-    if(!menuClick){
+    if (!menuClick) {
       this.navigation.push(data);
     }
 
@@ -96,14 +96,16 @@ export class DashboardComponent implements OnInit {
   }
 
 
-  changeGroup(item, i){
+  changeGroup(item, i) {
     console.log(i);
-    this.navigation = this.navigation.slice(0, i+1);
+    this.tmpGroupId = item._id;
+    this.navigation = this.navigation.slice(0, i + 1);
     console.log(this.navigation);
 
-    if(item.mainGroup){
+    if (item.mainGroup) {
+      this.tmpGroupId = null;
       this.getGroups();
-    }else{
+    } else {
       this.getGroupData(item, true);
     }
   }
