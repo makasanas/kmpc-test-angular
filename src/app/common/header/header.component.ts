@@ -10,10 +10,12 @@ import { Router } from '@angular/router';
 export class HeaderComponent implements OnInit {
 
   public username: String = '';
+  public userImage: String = '';
   constructor(private _router: Router) { }
 
   ngOnInit() {
     this.username = localStorage.getItem('userName');
+    this.userImage = localStorage.getItem('userImage');
   }
 
   logout() {

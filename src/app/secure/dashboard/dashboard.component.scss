@@ -436,7 +436,60 @@ $brand_color: #6f79fd;
     }
 }
 
-.link-text{
+.link-text {
     cursor: pointer;
     font-weight: bold;
+}
+
+
+.data {
+    &.vertical-data {
+        display: flex;
+        align-items: flex-start;
+        justify-content: flex-start;
+        font-size: 15px;
+
+        label {
+            font-weight: bold;
+            line-height: 2;
+            margin-right: 5px;
+
+            &:after {
+                content: ":";
+                margin-left: 3px;
+            }
+        }
+
+        .value {
+            line-height: 2;
+        }
+    }
+
+    &.horizontal-data {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: flex-start;
+
+        label {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .value {}
+    }
+
+
+}
+
+.group-overview {
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 15px;
+    border: 1px solid #ccc;
+    margin-top: 20px;
+    border-radius: 5px;
+
 }

@@ -31,7 +31,7 @@ export class SocialLoginComponent implements OnInit {
     this.socialAuthService.signIn(socialPlatformProvider).then(
       (userData) => {
         console.log(socialPlatform + " sign in data : ", userData);
-        // localStorage.setItem('token', userData.token);
+        localStorage.setItem('userImage', userData.image);
         localStorage.setItem('userName', userData.name);
         this._router.navigateByUrl('/dashboard');
         let user = {

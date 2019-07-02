@@ -18,9 +18,8 @@ export class DashboardComponent implements OnInit {
   public groups = [];
   public copyGroups = [];
   public sensors = [];
-
+  public searchText: string;
   public unforseenError = false;
-
   public activeDetailedRow: any = [];
   public groupform: any;
   public isLoading: boolean = true;
@@ -70,6 +69,8 @@ export class DashboardComponent implements OnInit {
   ngOnInit() {
     this.getGroups();
     setTimeout(() => { this.unforseenError = true; }, 5000);
+    this.copyGroups = JSON.parse(JSON.stringify(this.groups));
+    this.sort('shortTitle');
   }
 
 
@@ -119,6 +120,7 @@ export class DashboardComponent implements OnInit {
 
     if (item.mainGroup) {
       this.tmpGroupId = null;
+      this.tmpGroup = null;
       this.getGroups();
     } else {
       this.getGroupData(item, true);

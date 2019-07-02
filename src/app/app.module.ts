@@ -17,6 +17,7 @@ import { HeaderComponent } from './common/header/header.component';
 import { FormsModule } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ControlMessagesComponent } from './services/validation/control-messages.component';
+import { GrdFilterPipe } from './common/grd-filter.pipe';
 
 export function getAuthServiceConfigs() {
   let config = new AuthServiceConfig(
@@ -42,7 +43,8 @@ export function getAuthServiceConfigs() {
     DashboardComponent,
     SocialLoginComponent,
     HeaderComponent,
-    ControlMessagesComponent
+    ControlMessagesComponent,
+    GrdFilterPipe
   ],
   imports: [
     BrowserModule,

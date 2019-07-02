@@ -23,6 +23,34 @@
             </div>
         </div>
     </div>
+
+    <div class="group-overview" *ngIf="tmpGroup != null">
+        <div class="data horizontal-data">
+            <label>Short Title</label>
+            <span class="value">{{tmpGroup.shortTitle}}</span>
+        </div>
+        <div class="data horizontal-data">
+            <label>Title</label>
+            <span class="value">{{tmpGroup.title}}</span>
+        </div>
+        <div class="data horizontal-data">
+            <label>Wifi</label>
+            <span class="value">{{tmpGroup.wifi}}</span>
+        </div>
+        <div class="data horizontal-data">
+            <label>Group Cost</label>
+            <span class="value">{{tmpGroup.groupCost}}</span>
+        </div>
+        <div class="data horizontal-data">
+            <label>Sum Cost</label>
+            <span class="value">{{tmpGroup.sumCost}}</span>
+        </div>
+        <div class="data horizontal-data">
+            <label>Amount </label>
+            <span class="value">{{tmpGroup.amountSensors}}</span>
+        </div>
+    </div>
+
     <div class="header b-row">
         <div class="left">
             <h3>Groups</h3>
@@ -34,10 +62,14 @@
         </div>
     </div>
 
-    <div class="b-row">
-        <input type="text" (keyup)='keyUp.next($event)' class="form-control" placeholder="Search" />
+    <div class="b-row search-row">
+        <div class="input-group">
+            <div class="input">
+                <input type="text" [(ngModel)]="searchText" placeholder="Search group" />
+            </div>
+        </div>
     </div>
-    <div class="box rslt-box m-b-t-40">
+    <div class="box rslt-box m-t-20 m-b-40">
         <div class="result-table">
             <table>
                 <thead>
@@ -98,196 +130,103 @@
                     </tr>
                 </tbody>
                 <tbody *ngIf="groups.length != 0">
-                    <ng-template ngFor let-singleResult [ngForOf]="groups" let-i="index">
-                        <!-- <tr (click)="activateRowDetails(i); " [ngClass]="{'active' : activeDetailedRow[i] == true}"> -->
-                        <tr>
-                            <td (click)="getGroupData(singleResult, false);"><span
-                                    class="link-text">{{singleResult.shortTitle}}</span></td>
-                            <td>{{singleResult.title}}</td>
-                            <td>{{singleResult.wifi}}</td>
-                            <td>{{singleResult.groupCost}}</td>
-                            <td>{{singleResult.sumCost}}</td>
-                            <td>{{singleResult.amountSensors}}</td>
-                            <td>
-                                <button class="btn btn-primary sm-btn"
-                                    (click)="changePopup('addGroup',singleResult,'update');">
-                                    <span>Edit</span>
-                                </button>
+                    <!-- <tr (click)="activateRowDetails(i); " [ngClass]="{'active' : activeDetailedRow[i] == true}"> -->
+                    <tr
+                        *ngFor="let singleResult of groups | grdFilter: {title: searchText, shortTitle:searchText}; let i=index;">
+                        <td (click)="getGroupData(singleResult, false);"><span
+                                class="link-text">{{singleResult.shortTitle}}</span></td>
+                        <td>{{singleResult.title}}</td>
+                        <td>{{singleResult.wifi}}</td>
+                        <td>{{singleResult.groupCost}}</td>
+                        <td>{{singleResult.sumCost}}</td>
+                        <td>{{singleResult.amountSensors}}</td>
+                        <td>
+                            <button class="btn btn-primary sm-btn"
+                                (click)="changePopup('addGroup',singleResult,'update');">
+                                <span>Edit</span>
+                            </button>
 
-                            </td>
-                            <td>
-                                <button class="btn btn-danger sm-btn" (click)="deleteGroup(singleResult._id);">
-                                    <span>Delete</span>
-                                </button>
-                            </td>
-                        </tr>
-                        <tr *ngIf="activeDetailedRow[i] == true">
-                            <td colspan="6" class="data-td">
-                                <div class="close icon" (click)="activeDetailedRow[i] = false">
-                                    <svg id="Layer_1" height="512px" version="1.1" viewBox="0 0 512 512" width="512px"
-                                        space="preserve" xmlns="http://www.w3.org/2000/svg"
-                                        xlink="http://www.w3.org/1999/xlink">
-                                        <path
-                                            d="M437.5,386.6L306.9,256l130.6-130.6c14.1-14.1,14.1-36.8,0-50.9c-14.1-14.1-36.8-14.1-50.9,0L256,205.1L125.4,74.5  c-14.1-14.1-36.8-14.1-50.9,0c-14.1,14.1-14.1,36.8,0,50.9L205.1,256L74.5,386.6c-14.1,14.1-14.1,36.8,0,50.9  c14.1,14.1,36.8,14.1,50.9,0L256,306.9l130.6,130.6c14.1,14.1,36.8,14.1,50.9,0C451.5,423.4,451.5,400.6,437.5,386.6z">
-                                        </path>
-                                    </svg>
-                                </div>
-                                <div class="b-row">
-                                    <div class="data-title">
-                                        <h3>{{singleResult.title}}</h3>
-                                        <div class="add-button">
-                                            <button class="btn btn-primary"
-                                                (click)="changePopup('addGroup',singleResult._id,'add')">
-                                                <span>Add Group</span>
-                                            </button> <button class="btn btn-primary"
-                                                (click)="changePopup('addSensor',singleResult._id,'add')">
-                                                <span>Add Sensor</span>
-                                            </button>
-                                        </div>
-                                    </div>
-                                    <div class="edit-delete">
-                                        <button class="btn btn-primary"
-                                            (click)="changePopup('addGroup',singleResult,'update');">
-                                            <span>Edit</span>
-                                        </button>
-                                        <button class="btn btn-danger" (click)="deleteGroup(singleResult._id);">
-                                            <span>Delete</span>
-                                        </button>
-                                    </div>
-                                </div>
-                                <table class="sub-table">
-                                    <thead>
-                                        <tr>
-                                            <th>
-                                                <span>Mac</span>
-                                            </th>
-                                            <th>
-                                                <span>Title</span>
-                                            </th>
-                                            <th>
-                                                <span>Assignment</span>
-                                            </th>
-                                            <th>
-                                                <span>Version</span>
-                                            </th>
-                                            <th>
-                                                <span>Shipped</span>
-                                            </th>
-                                            <th>
-                                                <span>Installed</span>
-                                            </th>
-                                            <th>
-                                                <span>Sensor Cost</span>
-                                            </th>
-                                            <th>
-                                                <span>Last Seen</span>
-                                            </th>
-                                            <th></th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr *ngFor="let sensor of singleResult.sensors">
-                                            <td *ngIf="sensor.mac">
-                                                <span>{{sensor.mac}}</span>
-                                            </td>
-                                            <td *ngIf="sensor.title">
-                                                <span>{{sensor.title}}</span>
-                                            </td>
-                                            <td *ngIf="sensor.assignment">
-                                                <span>{{sensor.assignment}}</span>
-                                            </td>
-                                            <td *ngIf="sensor.version">
-                                                <span>{{sensor.version}}</span>
-                                            </td>
-                                            <td *ngIf="sensor.shipped">
-                                                <span>{{sensor.shipped | date: 'dd/MM/yyyy'}}</span>
-                                            </td>
-                                            <td *ngIf="sensor.installed">
-                                                <span>{{sensor.installed | date: 'dd/MM/yyyy'}}</span>
-                                            </td>
-                                            <td>
-                                                <span *ngIf="sensor.sensor_cost">{{sensor.sensor_cost}}</span>
-                                            </td>
-                                            <td>
-                                                <span *ngIf="sensor.last_seen">{{sensor.last_seen}}</span>
-                                            </td>
-                                            <td>
-                                                <button class="btn btn-primary"
-                                                    (click)="changePopup('addSensor',sensor,'update');">
-                                                    <span>Edit</span>
-                                                </button>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </td>
-                        </tr>
-                    </ng-template>
+                        </td>
+                        <td>
+                            <button class="btn btn-danger sm-btn" (click)="deleteGroup(singleResult._id);">
+                                <span>Delete</span>
+                            </button>
+                        </td>
+                    </tr>
+
                 </tbody>
             </table>
         </div>
     </div>
 
-    <div class="header b-row">
-        <div class="left">
-            <h3>Sensors</h3>
+    <div *ngIf="tmpGroupId != null">
+        <div class="header b-row">
+            <div class="left">
+                <h3>Sensors</h3>
+            </div>
+            <div class="right">
+                <button class="btn" (click)="changePopup('addSensor',tmpGroupId,'add')">
+                    <span>Add Sensor</span>
+                </button>
+            </div>
         </div>
-        <div class="right">
-            <button class="btn" (click)="changePopup('addSensor',tmpGroupId,'add')">
-                <span>Add Sensor</span>
-            </button>
+        <div class="b-row search-row">
+            <div class="input-group">
+                <div class="input">
+                    <input type="text" [(ngModel)]="searchTextSensor" placeholder="Search by mac or title" />
+                </div>
+            </div>
         </div>
-    </div>
-    <div class="box rslt-box m-b-t-40">
-        <div class="result-table">
-            <table>
-                <thead>
-                    <tr>
-                        <th>
-                            <span>Mac</span>
-                        </th>
-                        <th>
-                            <span>Title</span>
-                        </th>
-                        <th>
-                            <span>Assignment</span>
-                        </th>
-                        <th>
-                            <span>Version</span>
-                        </th>
-                        <th>
-                            <span>Shipped</span>
-                        </th>
-                        <th>
-                            <span>Installed</span>
-                        </th>
-                        <th>
-                            <span>Sensor Cost</span>
-                        </th>
-                        <!-- <th>
-                            <span>Last Seen</span>
-                        </th> -->
-                        <th></th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody class="loading" *ngIf="sensors.length == 0">
-                    <tr>
-                        <td colspan="10">
-                            <div *ngIf="isLoading">
-                                <div class="loading-circle">
-                                    <div class="half-circle"></div>
-                                </div>
-                            </div>
-                            <div *ngIf="!isLoading" class="getarcherror">
-                                no data available
-                            </div>
-                        </td>
-                    </tr>
-                </tbody>
-                <tbody *ngIf="sensors.length != 0">
-                    <ng-template ngFor let-sensor [ngForOf]="sensors" let-i="index">
+        <div class="box rslt-box m-b-t-40">
+            <div class="result-table">
+                <table>
+                    <thead>
                         <tr>
+                            <th>
+                                <span>Mac</span>
+                            </th>
+                            <th>
+                                <span>Title</span>
+                            </th>
+                            <th>
+                                <span>Assignment</span>
+                            </th>
+                            <th>
+                                <span>Version</span>
+                            </th>
+                            <th>
+                                <span>Shipped</span>
+                            </th>
+                            <th>
+                                <span>Installed</span>
+                            </th>
+                            <th>
+                                <span>Sensor Cost</span>
+                            </th>
+                            <!-- <th>
+                                <span>Last Seen</span>
+                            </th> -->
+                            <th></th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody class="loading" *ngIf="sensors.length == 0">
+                        <tr>
+                            <td colspan="10">
+                                <div *ngIf="isLoading">
+                                    <div class="loading-circle">
+                                        <div class="half-circle"></div>
+                                    </div>
+                                </div>
+                                <div *ngIf="!isLoading" class="getarcherror">
+                                    No data available
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                    <tbody *ngIf="sensors.length != 0">
+                        <tr
+                            *ngFor="let sensor of sensors | grdFilter: {mac: searchTextSensor, title:searchTextSensor}; let i=index;">
                             <td *ngIf="sensor.mac">
                                 <span>{{sensor.mac}}</span>
                             </td>
@@ -310,8 +249,8 @@
                                 <span *ngIf="sensor.sensorCost">{{sensor.sensorCost}}</span>
                             </td>
                             <!-- <td>
-                                <span *ngIf="sensor.last_seen">{{sensor.last_seen}}</span>
-                            </td> -->
+                                    <span *ngIf="sensor.last_seen">{{sensor.last_seen}}</span>
+                                </td> -->
                             <td>
                                 <button class="btn btn-primary sm-btn"
                                     (click)="changePopup('addSensor',sensor,'update');">
@@ -324,9 +263,9 @@
                                 </button>
                             </td>
                         </tr>
-                    </ng-template>
-                </tbody>
-            </table>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 </div>
