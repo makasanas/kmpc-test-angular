@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  api: 'http://webrexstudio.com:3030/'    
+  api: 'https://www.webrexstudio.com/kmpc-test-api/'
 };

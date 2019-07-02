@@ -4,7 +4,8 @@
 
 export const environment = {
   production: false,
-  api: 'http://webrexstudio.com:3030/'  
+  // api: 'http://webrexstudio.com:3030/'  
+  api:'https://www.webrexstudio.com/kmpc-test-api/'
 };
 
 /*

@@ -46,7 +46,7 @@ export class SecureService {
     return this.http.put(environment.api + 'api/v1/sensor/' + id, data, this.httpOptions).pipe(map((response: any) => response));
   }
 
-  deleteGroup(id: String) {
+    deleteGroup(id: String) {
     return this.http.delete(environment.api + 'api/v1/sensor/group/' + id, this.httpOptions).pipe(map((response: any) => response));
   }
 

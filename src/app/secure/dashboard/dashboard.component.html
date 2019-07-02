@@ -1,12 +1,34 @@
 <app-header></app-header>
 
 <div class="container">
+    <div class="groupDetial">
+        <div class="items">
+            <div class="item" *ngFor="let item of navigation; index as i;">
+                <p (click)="changeGroup(item, i)">
+                    {{item.title}}
+                </p>
+                <div class="next" *ngIf="navigation.length > i+1">
+                    <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg"
+                        xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="451.846px" height="451.847px"
+                        viewBox="0 0 451.846 451.847" style="enable-background:new 0 0 451.846 451.847;"
+                        xml:space="preserve">
+                        <g>
+                            <path
+                                d="M345.441,248.292L151.154,442.573c-12.359,12.365-32.397,12.365-44.75,0c-12.354-12.354-12.354-32.391,0-44.744
+                                        L278.318,225.92L106.409,54.017c-12.354-12.359-12.354-32.394,0-44.748c12.354-12.359,32.391-12.359,44.75,0l194.287,194.284
+                                        c6.177,6.18,9.262,14.271,9.262,22.366C354.708,234.018,351.617,242.115,345.441,248.292z" />
+                        </g>
+                    </svg>
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="header b-row">
         <div class="left">
             <h3>Groups</h3>
         </div>
         <div class="right">
-            <button class="btn" (click)="changePopup('addGroup',null,'add')">
+            <button class="btn" (click)="changePopup('addGroup',tmpGroupId,'add')">
                 <span>Add Group</span>
             </button>
         </div>
@@ -18,37 +40,37 @@
                     <tr>
                         <th (click)="sort('shortTitle')">
                             <span>Short Title</span>
-                            <i *ngIf="data != ''" class="fa" [ngClass]="{'fa-sort': column != 'shortTitle', 
+                            <i *ngIf="groups.length != 0" class="fa" [ngClass]="{'fa-sort': column != 'shortTitle', 
                       'fa-sort-asc': (column == 'shortTitle' && !isDesc), 
                       'fa-sort-desc': (column == 'shortTitle' && isDesc) }" aria-hidden="true"> </i>
                         </th>
                         <th (click)="sort('title')">
                             <span>Title</span>
-                            <i *ngIf="resultData != ''" class="fa" [ngClass]="{'fa-sort': column != 'title', 
+                            <i *ngIf="groups.length != 0" class="fa" [ngClass]="{'fa-sort': column != 'title', 
                       'fa-sort-asc': (column == 'title' && !isDesc), 
                       'fa-sort-desc': (column == 'title' && isDesc) }" aria-hidden="true"> </i>
                         </th>
                         <th (click)="sort('wifi')">
                             <span>Wifi</span>
-                            <i *ngIf="resultData != ''" class="fa" [ngClass]="{'fa-sort': column != 'wifi', 
+                            <i *ngIf="groups.length != 0" class="fa" [ngClass]="{'fa-sort': column != 'wifi', 
                       'fa-sort-asc': (column == 'wifi' && !isDesc), 
                       'fa-sort-desc': (column == 'wifi' && isDesc) }" aria-hidden="true"> </i>
                         </th>
                         <th (click)="sort('groupCost')">
                             <span>Group Cost</span>
-                            <i *ngIf="resultData != ''" class="fa" [ngClass]="{'fa-sort': column != 'groupCost', 
+                            <i *ngIf="groups.length != 0" class="fa" [ngClass]="{'fa-sort': column != 'groupCost', 
                       'fa-sort-asc': (column == 'groupCost' && !isDesc), 
                       'fa-sort-desc': (column == 'groupCost' && isDesc) }" aria-hidden="true"> </i>
                         </th>
                         <th (click)="sort('sumCost')">
                             <span>Sum Cost</span>
-                            <i *ngIf="resultData != ''" class="fa" [ngClass]="{'fa-sort': column != 'sumCost', 
+                            <i *ngIf="groups.length != 0" class="fa" [ngClass]="{'fa-sort': column != 'sumCost', 
                       'fa-sort-asc': (column == 'sumCost' && !isDesc), 
                       'fa-sort-desc': (column == 'sumCost' && isDesc) }" aria-hidden="true"> </i>
                         </th>
                         <th (click)="sort('amountSensors')">
                             <span>Amount Sensor</span>
-                            <i *ngIf="resultData != ''" class="fa" [ngClass]="{'fa-sort': column != 'amountSensors', 
+                            <i *ngIf="groups.length != 0" class="fa" [ngClass]="{'fa-sort': column != 'amountSensors', 
                       'fa-sort-asc': (column == 'amountSensors' && !isDesc), 
                       'fa-sort-desc': (column == 'amountSensors' && isDesc) }" aria-hidden="true"> </i>
                         </th>
@@ -58,7 +80,7 @@
                 </thead>
                 <tbody class="loading" *ngIf="groups.length == 0">
                     <tr>
-                        <td colspan="6">
+                        <td colspan="8">
                             <div *ngIf="!unforseenError">
                                 <div class="loading-circle">
                                     <div class="half-circle"></div>
@@ -66,8 +88,7 @@
                                 <div class="loading-text">{{randomLoadingString}}</div>
                             </div>
                             <div *ngIf="unforseenError" class="getarcherror">
-                                {{getArchError}}
-                                <button class="btn" (click)="retryApiCall();">Retry</button>
+                                No data available
                             </div>
                         </td>
                     </tr>
@@ -194,6 +215,110 @@
                                         </tr>
                                     </tbody>
                                 </table>
+                            </td>
+                        </tr>
+                    </ng-template>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="header b-row">
+        <div class="left">
+            <h3>Sensors</h3>
+        </div>
+        <div class="right">
+            <button class="btn" (click)="changePopup('addSensor',tmpGroupId,'add')">
+                <span>Add Sensor</span>
+            </button>
+        </div>
+    </div>
+    <div class="box rslt-box m-b-t-40">
+        <div class="result-table">
+            <table>
+                <thead>
+                    <tr>
+                        <th>
+                            <span>Mac</span>
+                        </th>
+                        <th>
+                            <span>Title</span>
+                        </th>
+                        <th>
+                            <span>Assignment</span>
+                        </th>
+                        <th>
+                            <span>Version</span>
+                        </th>
+                        <th>
+                            <span>Shipped</span>
+                        </th>
+                        <th>
+                            <span>Installed</span>
+                        </th>
+                        <th>
+                            <span>Sensor Cost</span>
+                        </th>
+                        <th>
+                            <span>Last Seen</span>
+                        </th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody class="loading" *ngIf="sensors.length == 0">
+                    <tr>
+                        <td colspan="10">
+                            <div *ngIf="!unforseenError">
+                                <div class="loading-circle">
+                                    <div class="half-circle"></div>
+                                </div>
+                                <div class="loading-text">{{randomLoadingString}}</div>
+                            </div>
+                            <div *ngIf="unforseenError" class="getarcherror">
+                                no data available
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+                <tbody *ngIf="sensors.length != 0">
+                    <ng-template ngFor let-sensor [ngForOf]="sensors" let-i="index">
+                        <tr>
+                            <td *ngIf="sensor.mac">
+                                <span>{{sensor.mac}}</span>
+                            </td>
+                            <td *ngIf="sensor.title">
+                                <span>{{sensor.title}}</span>
+                            </td>
+                            <td *ngIf="sensor.assignment">
+                                <span>{{sensor.assignment}}</span>
+                            </td>
+                            <td *ngIf="sensor.version">
+                                <span>{{sensor.version}}</span>
+                            </td>
+                            <td *ngIf="sensor.shipped">
+                                <span>{{sensor.shipped}}</span>
+                            </td>
+                            <td *ngIf="sensor.installed">
+                                <span>{{sensor.installed}}</span>
+                            </td>
+                            <td>
+                                <span *ngIf="sensor.sensor_cost">{{sensor.sensor_cost}}</span>
+                            </td>
+                            <td>
+                                <span *ngIf="sensor.last_seen">{{sensor.last_seen}}</span>
+                            </td>
+                            <td>
+                                <button class="btn btn-primary sm-btn"
+                                    (click)="changePopup('addSensor',sensor,'update');">
+                                    <span>Edit</span>
+                                </button>
+                            </td>
+                            <td>
+                                <button class="btn btn-danger sm-btn" (click)="deleteSensor(sensor._id);">
+                                    <span>Delete</span>
+                                </button>
                             </td>
                         </tr>
                     </ng-template>

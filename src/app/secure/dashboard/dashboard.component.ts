@@ -12,6 +12,9 @@ import { ValidationService } from './../../services/validation/validationService
 export class DashboardComponent implements OnInit {
 
   public groups = [];
+  public sensors = [];
+
+  public unforseenError = false;
 
   public activeDetailedRow: any = [];
   public groupform: any;
@@ -19,11 +22,18 @@ export class DashboardComponent implements OnInit {
   public tmpGroupId: string;
   public tmpSensorId: string;
   public tmpUpdateId: string;
+  public isGroupData: boolean = false;
   public popupActive = {
     "addGroup": false,
     "addSensor": false,
   };
   public popupType = 'add';
+  public navigation = [
+    {
+      "title": "Group List",
+      "mainGroup":true,
+    }
+  ];
 
   constructor(private _secService: SecureService, private _fb: FormBuilder) {
     this.groupform = this._fb.group({
@@ -47,6 +57,7 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit() {
     this.getGroups();
+    setTimeout(() => { this.unforseenError = true; }, 5000);
   }
 
 
@@ -54,9 +65,13 @@ export class DashboardComponent implements OnInit {
     this._secService.getAllGroups().subscribe((res) => {
       console.log(res);
       this.groups = res.groups;
+      this.sensors = [];
+
       this.groups.forEach((element, index) => {
         this.activeDetailedRow[index] = false;
       });
+
+
 
     }, err => {
       console.log(err);
@@ -64,14 +79,33 @@ export class DashboardComponent implements OnInit {
 
   }
 
-  getGroupData(data) {
+  getGroupData(data,menuClick) {
+
+    if(!menuClick){
+      this.navigation.push(data);
+    }
+
+    this.tmpGroupId = data._id;
     this._secService.getGroup(data._id).subscribe((res) => {
       this.groups = res.groups;
-      this.groups = res.sensors;
+      this.sensors = res.sensors;
       console.log(res);
     }, err => {
       console.log(err);
     });
+  }
+
+
+  changeGroup(item, i){
+    console.log(i);
+    this.navigation = this.navigation.slice(0, i+1);
+    console.log(this.navigation);
+
+    if(item.mainGroup){
+      this.getGroups();
+    }else{
+      this.getGroupData(item, true);
+    }
   }
 
   changePopup(popup: string, data: any, type: string) {
@@ -112,8 +146,8 @@ export class DashboardComponent implements OnInit {
         let newInstallDate = new Date(data.installed);
 
         this.sensorform.patchValue(data);
-        this.sensorform.shipped.setValue(newShippedDate);
-        this.sensorform.installed.setValue(newInstallDate);
+        this.sensorform.controls.shipped.setValue(newShippedDate);
+        this.sensorform.controls.installed.setValue(newInstallDate);
       }
     } else if (type == 'close') {
       this.tmpGroupId = '';
@@ -189,6 +223,7 @@ export class DashboardComponent implements OnInit {
 
   }
 
+
   deleteGroup(id: string) {
     this._secService.deleteGroup(id).subscribe((res) => {
       console.log(res);
@@ -198,6 +233,14 @@ export class DashboardComponent implements OnInit {
     });
   }
 
+  deleteSensor(id: string) {
+    this._secService.deleteSensor(id).subscribe((res) => {
+      console.log(res);
+      this.getGroups();
+    }, err => {
+      console.log(err);
+    });
+  }
   public sortTable: any = {};
   public isDesc: any;
   public column: any;
