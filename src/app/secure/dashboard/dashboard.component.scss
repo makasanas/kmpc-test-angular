@@ -228,6 +228,19 @@ $brand_color: #6f79fd;
                 }
             }
         }
+
+        .edit-delete {
+
+            padding-bottom: 15px;
+            padding-right: 30px;
+
+            .btn {
+                padding: 5px 10px;
+                font-size: 12px;
+                margin-left: 10px;
+                letter-spacing: 0.2px;
+            }
+        }
     }
 
     .sub-table {

@@ -237,6 +237,18 @@ button {
         background: $brand_color;
         color: #fff;
     }
+
+    &.btn-danger {
+        background: #ff6d6d;
+        color: #fff;
+    }
+
+    &.sm-btn {
+
+        padding: 5px 10px;
+        font-size: 12px;
+        letter-spacing: 0.2px;
+    }
 }
 
 
@@ -367,5 +379,13 @@ input {
 
     &.end {
         justify-content: flex-end;
+    }
+}
+
+.controlMessage {
+    div {
+        font-size: 12px;
+        margin-top: 2px;
+        color: red;
     }
 }

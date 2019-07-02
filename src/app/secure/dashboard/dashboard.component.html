@@ -6,7 +6,7 @@
             <h3>Groups</h3>
         </div>
         <div class="right">
-            <button class="btn" (click)="changePopup('addGroup',null)">
+            <button class="btn" (click)="changePopup('addGroup',null,'add')">
                 <span>Add Group</span>
             </button>
         </div>
@@ -52,9 +52,11 @@
                       'fa-sort-asc': (column == 'amountSensors' && !isDesc), 
                       'fa-sort-desc': (column == 'amountSensors' && isDesc) }" aria-hidden="true"> </i>
                         </th>
+                        <th></th>
+                        <th></th>
                     </tr>
                 </thead>
-                <tbody class="loading" *ngIf="data.length == 0">
+                <tbody class="loading" *ngIf="groups.length == 0">
                     <tr>
                         <td colspan="6">
                             <div *ngIf="!unforseenError">
@@ -70,15 +72,28 @@
                         </td>
                     </tr>
                 </tbody>
-                <tbody *ngIf="data.length != 0">
-                    <ng-template ngFor let-singleResult [ngForOf]="data" let-i="index">
-                        <tr (click)="activateRowDetails(i); " [ngClass]="{'active' : activeDetailedRow[i] == true}">
+                <tbody *ngIf="groups.length != 0">
+                    <ng-template ngFor let-singleResult [ngForOf]="groups" let-i="index">
+                        <!-- <tr (click)="activateRowDetails(i); " [ngClass]="{'active' : activeDetailedRow[i] == true}"> -->
+                        <tr (click)="getGroupData(singleResult);">
                             <td>{{singleResult.shortTitle}}</td>
                             <td>{{singleResult.title}}</td>
                             <td>{{singleResult.wifi}}</td>
                             <td>{{singleResult.groupCost}}</td>
                             <td>{{singleResult.sumCost}}</td>
                             <td>{{singleResult.amountSensors}}</td>
+                            <td>
+                                <button class="btn btn-primary sm-btn"
+                                    (click)="changePopup('addGroup',singleResult,'update');">
+                                    <span>Edit</span>
+                                </button>
+
+                            </td>
+                            <td>
+                                <button class="btn btn-danger sm-btn" (click)="deleteGroup(singleResult._id);">
+                                    <span>Delete</span>
+                                </button>
+                            </td>
                         </tr>
                         <tr *ngIf="activeDetailedRow[i] == true">
                             <td colspan="6" class="data-td">
@@ -91,15 +106,26 @@
                                         </path>
                                     </svg>
                                 </div>
-                                <div class="data-title">
-                                    <h3>{{singleResult.title}}</h3>
-                                    <div class="add-button">
+                                <div class="b-row">
+                                    <div class="data-title">
+                                        <h3>{{singleResult.title}}</h3>
+                                        <div class="add-button">
+                                            <button class="btn btn-primary"
+                                                (click)="changePopup('addGroup',singleResult._id,'add')">
+                                                <span>Add Group</span>
+                                            </button> <button class="btn btn-primary"
+                                                (click)="changePopup('addSensor',singleResult._id,'add')">
+                                                <span>Add Sensor</span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="edit-delete">
                                         <button class="btn btn-primary"
-                                            (click)="changePopup('addGroup',singleResult._id)">
-                                            <span>Add Group</span>
-                                        </button> <button class="btn btn-primary"
-                                            (click)="changePopup('addSensor',singleResult._id)">
-                                            <span>Add Sensor</span>
+                                            (click)="changePopup('addGroup',singleResult,'update');">
+                                            <span>Edit</span>
+                                        </button>
+                                        <button class="btn btn-danger" (click)="deleteGroup(singleResult._id);">
+                                            <span>Delete</span>
                                         </button>
                                     </div>
                                 </div>
@@ -130,6 +156,7 @@
                                             <th>
                                                 <span>Last Seen</span>
                                             </th>
+                                            <th></th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -152,11 +179,17 @@
                                             <td *ngIf="sensor.installed">
                                                 <span>{{sensor.installed}}</span>
                                             </td>
-                                            <td *ngIf="sensor.sensor_cost">
-                                                <span>{{sensor.sensor_cost}}</span>
+                                            <td>
+                                                <span *ngIf="sensor.sensor_cost">{{sensor.sensor_cost}}</span>
                                             </td>
-                                            <td *ngIf="sensor.last_seen">
-                                                <span>{{sensor.last_seen}}</span>
+                                            <td>
+                                                <span *ngIf="sensor.last_seen">{{sensor.last_seen}}</span>
+                                            </td>
+                                            <td>
+                                                <button class="btn btn-primary"
+                                                    (click)="changePopup('addSensor',sensor,'update');">
+                                                    <span>Edit</span>
+                                                </button>
                                             </td>
                                         </tr>
                                     </tbody>
@@ -172,9 +205,10 @@
 
 <div class="popup-container" [ngClass]="{active: popupActive.addGroup}">
     <div class="popup">
-        <div class="close" (click)="changePopup('addGroup')">&times;</div>
+        <div class="close" (click)="changePopup('addGroup',null,'close')">&times;</div>
         <div class="popup-heading">
-            <h1>Add Group</h1>
+            <h1><span *ngIf='popupType == "add"'>Add Group</span>
+                <span *ngIf='popupType == "update"'>Update Group</span></h1>
         </div>
         <div class="form">
             <form [formGroup]="groupform">
@@ -182,32 +216,41 @@
                     <div class="input">
                         <input type="text" formControlName="shortTitle" placeholder="Group short title">
                     </div>
+                    <control-messages [control]="groupform.controls.shortTitle" class="controlMessage">
+                    </control-messages>
                 </div>
                 <div class="input-group">
                     <div class="input">
                         <input type="text" formControlName="title" placeholder="Group title">
                     </div>
+                    <control-messages [control]="groupform.controls.title" class="controlMessage">
+                    </control-messages>
                 </div>
                 <div class="input-group">
                     <div class="input">
                         <input type="text" formControlName="wifi" placeholder="Wifi credentials">
                     </div>
+                    <control-messages [control]="groupform.controls.wifi" class="controlMessage">
+                    </control-messages>
                 </div>
                 <div class="input-group">
                     <div class="input">
                         <input type="text" formControlName="groupCost" placeholder="Group Cost">
                     </div>
+                    <control-messages [control]="groupform.controls.groupCost" class="controlMessage">
+                    </control-messages>
                 </div>
                 <input type="text" formControlName="parentGroup" class="hidden">
             </form>
         </div>
         <div class="popup-footer">
             <div class="actions end">
-                <button class="btn">
+                <button class="btn" (click)="changePopup('addGroup',null,'close')">
                     <span>Cancle</span>
                 </button>
                 <button class="btn btn-primary" (click)="addGroup();">
-                    <span>Add</span>
+                    <span *ngIf='popupType == "add"'>Add</span>
+                    <span *ngIf='popupType == "update"'>Update</span>
                 </button>
             </div>
         </div>
@@ -216,9 +259,10 @@
 
 <div class="popup-container" [ngClass]="{active: popupActive.addSensor}">
     <div class="popup">
-        <div class="close" (click)="changePopup('addSensor')">&times;</div>
+        <div class="close" (click)="changePopup('addSensor',null,'close')">&times;</div>
         <div class="popup-heading">
-            <h1>Add Sensor</h1>
+            <h1><span *ngIf='popupType == "add"'>Add Sensor</span>
+                <span *ngIf='popupType == "update"'>Update Sensor</span></h1>
         </div>
         <div class="form">
             <form [formGroup]="sensorform">
@@ -226,46 +270,61 @@
                     <div class="input">
                         <input type="text" formControlName="mac" placeholder="Mac">
                     </div>
+                    <control-messages [control]="sensorform.controls.mac" class="controlMessage">
+                    </control-messages>
                 </div>
                 <div class="input-group">
                     <div class="input">
                         <input type="text" formControlName="title" placeholder="Sensor title">
                     </div>
+                    <control-messages [control]="sensorform.controls.title" class="controlMessage">
+                    </control-messages>
                 </div>
                 <div class="input-group">
                     <div class="input">
                         <input type="text" formControlName="assignment" placeholder="Assignment">
                     </div>
+                    <control-messages [control]="sensorform.controls.assignment" class="controlMessage">
+                    </control-messages>
                 </div>
                 <div class="input-group">
                     <div class="input">
                         <input type="text" formControlName="version" placeholder="Version">
                     </div>
+                    <control-messages [control]="sensorform.controls.version" class="controlMessage">
+                    </control-messages>
                 </div>
                 <div class="input-group">
                     <div class="input">
                         <input type="date" formControlName="shipped" placeholder="Shipping date">
                     </div>
+                    <control-messages [control]="sensorform.controls.shipped" class="controlMessage">
+                    </control-messages>
                 </div>
                 <div class="input-group">
                     <div class="input">
                         <input type="date" formControlName="installed" placeholder="Installation date">
                     </div>
+                    <control-messages [control]="sensorform.controls.installed" class="controlMessage">
+                    </control-messages>
                 </div>
                 <div class="input-group">
                     <div class="input">
                         <input type="text" formControlName="sensorCost" placeholder="Sensor Cost">
                     </div>
+                    <control-messages [control]="sensorform.controls.sensorCost" class="controlMessage">
+                    </control-messages>
                 </div>
             </form>
         </div>
         <div class="popup-footer">
             <div class="actions end">
-                <button class="btn">
+                <button class="btn" (click)="changePopup('addSensor',null,'close')">
                     <span>Cancle</span>
                 </button>
                 <button class="btn btn-primary" (click)="addSensor();">
-                    <span>Add</span>
+                    <span *ngIf='popupType == "add"'>Add</span>
+                    <span *ngIf='popupType == "update"'>Update</span>
                 </button>
             </div>
         </div>

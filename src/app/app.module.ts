@@ -15,6 +15,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { HeaderComponent } from './common/header/header.component';
 import { FormsModule } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
+import { ControlMessagesComponent } from './services/validation/control-messages.component';
 
 export function getAuthServiceConfigs() {
   let config = new AuthServiceConfig(
@@ -39,7 +40,8 @@ export function getAuthServiceConfigs() {
     LoginComponent,
     DashboardComponent,
     SocialLoginComponent,
-    HeaderComponent
+    HeaderComponent,
+    ControlMessagesComponent
   ],
   imports: [
     BrowserModule,
