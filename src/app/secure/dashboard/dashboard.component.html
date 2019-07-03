@@ -137,8 +137,8 @@
                                 class="link-text">{{singleResult.shortTitle}}</span></td>
                         <td>{{singleResult.title}}</td>
                         <td>{{singleResult.wifi}}</td>
-                        <td>{{singleResult.groupCost}}</td>
-                        <td>{{singleResult.sumCost}}</td>
+                        <td>{{singleResult.groupCost | number : '1.2-2'}}  €</td>
+                        <td>{{singleResult.sumCost | number : '1.2-2'}}  €</td>
                         <td>{{singleResult.amountSensors}}</td>
                         <td>
                             <button class="btn btn-primary sm-btn"
@@ -240,13 +240,13 @@
                                 <span>{{sensor.version}}</span>
                             </td>
                             <td *ngIf="sensor.shipped">
-                                <span>{{sensor.shipped | date}}</span>
+                                <span>{{sensor.shipped | date: 'dd-MM-yyyy'}}</span>
                             </td>
                             <td *ngIf="sensor.installed">
-                                <span>{{sensor.installed | date}}</span>
+                                <span>{{sensor.installed | date: 'dd-MM-yyyy'}}</span>
                             </td>
                             <td>
-                                <span *ngIf="sensor.sensorCost">{{sensor.sensorCost}}</span>
+                                <span *ngIf="sensor.sensorCost">{{sensor.sensorCost | number : '1.2-2'}} €</span>
                             </td>
                             <!-- <td>
                                     <span *ngIf="sensor.last_seen">{{sensor.last_seen}}</span>
