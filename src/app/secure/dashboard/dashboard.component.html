@@ -39,11 +39,11 @@
         </div>
         <div class="data horizontal-data">
             <label>Group Cost</label>
-            <span class="value">{{tmpGroup.groupCost | number : '1.2-2'}} €</span>
+            <span class="value">{{tmpGroup.groupCost | currency:'EUR':'symbol':'1.2-2':'it'}} </span>
         </div>
         <div class="data horizontal-data">
             <label>Sum Cost</label>
-            <span class="value">{{tmpGroup.sumCost | number : '1.2-2'}} €</span>
+            <span class="value">{{tmpGroup.sumCost | currency:'EUR':'symbol':'1.2-2':'it'}} </span>
         </div>
         <div class="data horizontal-data">
             <label>Amount </label>
@@ -137,8 +137,8 @@
                                 class="link-text">{{singleResult.shortTitle}}</span></td>
                         <td>{{singleResult.title}}</td>
                         <td>{{singleResult.wifi}}</td>
-                        <td>{{singleResult.groupCost | number : '1.2-2'}}  €</td>
-                        <td>{{singleResult.sumCost | number : '1.2-2'}}  €</td>
+                        <td>{{singleResult.groupCost | currency:'EUR':'symbol':'1.2-2':'it'}} </td>
+                        <td>{{singleResult.sumCost | currency:'EUR':'symbol':'1.2-2':'it'}}</td>
                         <td>{{singleResult.amountSensors}}</td>
                         <td>
                             <button class="btn btn-primary sm-btn"
@@ -246,7 +246,7 @@
                                 <span>{{sensor.installed | date: 'dd-MM-yyyy'}}</span>
                             </td>
                             <td>
-                                <span *ngIf="sensor.sensorCost">{{sensor.sensorCost | number : '1.2-2'}} €</span>
+                                <span *ngIf="sensor.sensorCost">{{sensor.sensorCost | currency:'EUR':'symbol':'1.2-2':'it'}} </span>
                             </td>
                             <!-- <td>
                                     <span *ngIf="sensor.last_seen">{{sensor.last_seen}}</span>

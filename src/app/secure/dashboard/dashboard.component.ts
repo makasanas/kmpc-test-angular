@@ -5,7 +5,9 @@ import { ValidationService } from './../../services/validation/validationService
 import { map } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 import { DatePipe } from '@angular/common';
-
+import { registerLocaleData } from '@angular/common';
+import localeFr from '@angular/common/locales/it';
+registerLocaleData(localeFr, 'it');
 
 @Component({
   selector: 'app-dashboard',
